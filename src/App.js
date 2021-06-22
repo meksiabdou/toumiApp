@@ -38,7 +38,7 @@ function App() {
 
     if (name && maxPrix && minPrix) {
       const regExp = new RegExp(
-        `^${escapeRegExp(name.toLocaleLowerCase())}$`,
+        `${escapeRegExp(name.toLocaleLowerCase())}`,
         "g"
       );
 
