@@ -15,7 +15,7 @@ function App() {
 
   const getNumberFromString = (string) => {
     try {
-      string = string.replace(/([a-zA-Z,()%]*)/g, "").trim();
+      string = string.replace(/([a-zA-Z,é()%]*)/g, "").trim();
       const number = Number(string);
       if (number && number !== NaN) {
         return number;
@@ -36,36 +36,36 @@ function App() {
   const onSubmit = () => {
     let newData = [];
 
-    if (name && maxPrix && minPrix) {
-      const regExp = new RegExp(
-        `${escapeRegExp(name.toLocaleLowerCase())}`,
-        "g"
+    const regExp = name
+      ? new RegExp(`${escapeRegExp(name.toLocaleLowerCase())}`, "g")
+      : null;
+
+    const byName = (namePhone) => {
+      if (regExp) {
+        return Array.isArray(namePhone.toLocaleLowerCase().match(regExp));
+      }
+      return true;
+    };
+
+    const _minPrix = minPrix ? getNumberFromString(minPrix) : 5000;
+    const _maxPrix = maxPrix ? getNumberFromString(maxPrix) : null;
+
+    newData = data.filter(
+      (item) => byName(item.nom) && _minPrix <= getNumberFromString(item.prix)
+    );
+
+    if (_maxPrix) {
+      newData = newData.filter(
+        (item) => _maxPrix >= getNumberFromString(item.prix)
       );
-
-      newData = dataPone.filter((item) => {
-        if (item.prix && item.nom) {
-          const prix = getNumberFromString(item.prix);
-          const _minPrix = getNumberFromString(minPrix);
-          const _maxPrix = getNumberFromString(maxPrix);
-
-          if (
-            Array.isArray(item.nom.toLocaleLowerCase().match(regExp)) &&
-            _minPrix <= prix &&
-            _maxPrix >= prix
-          ) {
-            return true;
-          }
-        }
-        return false;
-      });
     }
 
     setDataPhone(newData);
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     setDataPhone(data);
-  }, []);
+  }, []);*/
 
   return (
     <div className=" bg-gray-50 h-full w-full overflow-x-hidden ">
@@ -119,7 +119,7 @@ function App() {
           <div className="w-full mb-6">
             <button
               className="w-full w-full h-12 rounded-sm mt-3 bg-blue-200"
-              onSubmit={onSubmit}
+              onClick={onSubmit}
             >
               Trouver
             </button>
