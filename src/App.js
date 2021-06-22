@@ -15,7 +15,7 @@ function App() {
 
   const getNumberFromString = (string) => {
     try {
-      string = string.replace(/([a-zA-Z,()%].*)/g, "").trim();
+      string = string.replace(/([a-zA-Z,()%]*)/g, "").trim();
       const number = Number(string);
       if (number && number !== NaN) {
         return number;
